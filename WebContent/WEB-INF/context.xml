@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Resource auth="Container" driverClassName="oracle.jdbc.driver.OracleDriver"
-	url="jdbc:oracle:thin:@localhost:1521:xe" username="admin" password="oracle"
+	url="jdbc:oracle:thin:@localhost:1521:xe" username="board" password="1234"
 	name="jdbc/Oracle11g" type="javax.sql.DataSource" initialSize="5"
 	minIdle="5" maxIdle="50" maxActive="50" maxWait="1000" />

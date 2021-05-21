@@ -10,9 +10,10 @@ create table ORG_USER (
 -- 사용자 정보를 저장할 테이블
 create table ORG_USER_INFO (
     USER_ID varchar(20) primary key,
+    NAME varchar(20),
     PHONE varchar(15),
     EMAIL varchar(30),   
-    ADDRESS varchar(50)
+    gender varchar(10)
 );
 
 -- 테이블 내 모든 데이터 검색
@@ -61,4 +62,9 @@ select a.user_id, a.user_pw, b.phone, b.email, b.address from org_user a
 
 select a.user_id, a.user_pw, b.phone, b.email, b.address from org_user a left outer join org_user_info b on a.user_id = b.user_id;
     -- 조인된 완성본에서 다시 조회 조건을 부여할 때 조인 후 조건문 사용
-    -- where b.phone is not null;       
+    -- where b.phone is not null;
+    
+
+create table board(
+	num number not null
+);

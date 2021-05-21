@@ -9,7 +9,7 @@
 <body>
 
 <!-- 헤드 레이아웃 include -->
-<jsp:include page = "/layout/headLayout.jspf" flush="false"/>
+<jsp:include page = "/layout/headLayout.jsp" flush="false"/>
 
 <!-- 회원가입 (페이지 직접 접속할 경우에도 세션에 로그인 값 있으면 안보여줌)  -->
 <% if (session.getAttribute("userID") == null) { %>

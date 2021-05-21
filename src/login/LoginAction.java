@@ -1,9 +1,12 @@
 package login;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import control.Command;
 import control.Ctrl;
 import db.UserInfoDAO;
@@ -26,7 +29,7 @@ public class LoginAction implements Command {
 		}
 		
 		UserInfoDAO dao = new UserInfoDAO(request);
-		int result = dao.loginAccept();
+		int result = dao.loginAccept();	
 		
 		// 로그인 성공 시 세션 및 쿠키 설정
 		if(result == Ctrl.TRUE){
@@ -44,6 +47,7 @@ public class LoginAction implements Command {
 			
 			return Ctrl.TRUE;
 		}else if(result == Ctrl.FALSE) { // 로그인 실패시
+			
 			session.setAttribute("loginMsg", "로그인에 실패했습니다. 계정을 확인해주세요.");
 			return Ctrl.FALSE;
 		}else{

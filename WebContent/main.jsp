@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<jsp:include page="/layout/headLayout.jspf" flush="false"/>
+	<jsp:include page="/layout/headLayout.jsp" flush="false"/>
 </body>
 </html>

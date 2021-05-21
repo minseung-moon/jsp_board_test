@@ -27,21 +27,27 @@ public class UserInfoDAO {
 	
 	// 회원가입 정보 DB 입력
 	public int registerUserInfo(UserInfoDTO dto) {
+		String sql = "";
 		try {
 			int check = isUserID(dto);
-			
 			if(check == Ctrl.TRUE) { // 이미 존재하는 ID일 경우
 				return Ctrl.FALSE;
 			}else if(check == Ctrl.FALSE) { // 존재하지 않는 경우 등록
-				pstmt = conn.prepareStatement("insert into ORG_USER values(?,?,?,?,?,?)");
+				sql = "insert into ORG_USER (USER_ID, USER_PW) values (?, ?)";
+				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, dto.getUserID());
 				pstmt.setString(2, dto.getUserPW());
-				pstmt.setString(3, dto.getUserName());
-				pstmt.setString(4, dto.getUserEmail());
-				pstmt.setString(5, dto.getUserPhone());
-				pstmt.setString(6, dto.getUserGender());
-				
 				pstmt.executeUpdate();
+				
+				sql = "insert into ORG_USER_INFO values (?, ?, ?, ?, ?)";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, dto.getUserID());
+				pstmt.setString(2, dto.getUserName());
+				pstmt.setString(3, dto.getUserPhone());
+				pstmt.setString(4, dto.getUserEmail());
+				pstmt.setString(5, dto.getUserGender());
+				pstmt.executeUpdate();
+				
 				conn.commit();
 				return Ctrl.TRUE;
 			}
@@ -67,16 +73,15 @@ public class UserInfoDAO {
 	public int loginAccept() {
 		try {
 			dbConnect();
-			String sql = "select userID, userPW from ORG_USER where userID=?";
+			String sql = "select user_ID, user_PW from ORG_USER where user_ID=?";
 			String userID = request.getParameter("userID");
 			String userPW = request.getParameter("userPW");
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, userID);
 			result = pstmt.executeQuery();
-			
 			// 있으면 TRUE
 			result.next();
-			if(result.getString("userID").equals(userID) && result.getString("userPW").equals(userPW)){
+			if(result.getString("user_ID").equals(userID) && result.getString("user_PW").equals(userPW)){
 				return Ctrl.TRUE;
 			}
 			
@@ -95,20 +100,28 @@ public class UserInfoDAO {
 	
 	// 회원정보 출력
 	public int getUserInfo() {
+		String sql = "";
+		UserInfoDTO dto = new UserInfoDTO();
 		try {
 			HttpSession session = request.getSession();
 			dbConnect();
-			String sql = "select * from ORG_USER where userID = ?";
+			
+			sql = "select * from ORG_USER where USER_ID = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, (String) session.getAttribute("userID"));
 			result = pstmt.executeQuery();
-			
-			UserInfoDTO dto = new UserInfoDTO();
 			result.next();
-			dto.setUserID(result.getString("userID"));
-			dto.setUserName(result.getString("userName"));
-			dto.setUserEmail(result.getString("userEmail"));
-			dto.setUserPhone(result.getString("userPhone"));
+			dto.setUserID(result.getString("USER_ID"));
+			
+			sql = "select * from ORG_USER_INFO where USER_ID = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getUserID());
+			result = pstmt.executeQuery();
+			result.next();
+			dto.setUserName(result.getString("NAME"));
+			dto.setUserEmail(result.getString("EMAIL"));
+			dto.setUserPhone(result.getString("PHONE"));
+			dto.setUserGender(result.getString("gender"));
 			
 			// 세션에 dto 객체 추가
 			session.setAttribute("userInfo", dto);
@@ -126,7 +139,7 @@ public class UserInfoDAO {
 	// ID 존재 여부 확인
 	private int isUserID(UserInfoDTO dto) throws Exception{
 		dbConnect();
-		String sql = "select userID from ORG_USER where userID = ?";
+		String sql = "select user_ID from ORG_USER where user_ID = ?";
 		pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, dto.getUserID());
 		result = pstmt.executeQuery();

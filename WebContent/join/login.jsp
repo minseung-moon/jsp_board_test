@@ -10,7 +10,7 @@
 <body>
 
 <!-- 헤드 레이아웃 include -->
-<jsp:include page = "/layout/headLayout.jspf" flush="false"/>
+<jsp:include page = "/layout/headLayout.jsp" flush="false"/>
 
 <!-- 세션에 정보가 없을 경우에만 로그인 창 보여주기 -->
 <% if (session.getAttribute("userID") == null) { %>
